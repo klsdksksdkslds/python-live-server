@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+import os
+import server
+from sys import argv
+
+
+def show_usage() -> None:
+    print('''
+Usage:
+  live-server <site-directory> <ip> <port>
+  - site-directory: path
+  - ip: string
+  - port: int
+'''.strip())
+
+
+def show_error(error: str) -> None:
+    print(error)
+    show_usage()
+
+
+def main() -> None:
+    try:
+        site_directory, ip, port = argv[1:]
+    except Exception as e:
+        raise e
+
+    if not os.path.exists(site_directory):
+        show_error(f"Path '{site_directory}' is not exists!")
+        return
+
+    try:
+        port = int(port)
+    except ValueError:
+        show_error("Port is string!")
+        return
+
+    server.start(site_directory, (ip, port))
+
